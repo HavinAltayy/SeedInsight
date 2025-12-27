@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeedInsight - Analiz Paneli</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="/static/images/Logo2.png" alt="SeedInsight Logo" class="nav-logo-img">
+                SeedInsight
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">Ana Sayfa</a></li>
+                <li><a href="/model">Model</a></li>
+                <li><a href="/contact">İletişim</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="context-bar">
+        <div class="context-container">
+            <div class="metric-item">
+                <div class="metric-dot"></div>
+                <span class="metric-label">Vision Transformer ViT-B/16</span>
+            </div>
+            <div class="metric-item">
+                <span>88 Tür Tanımlama Kapasitesi</span>
+            </div>
+            <div class="metric-item">
+                <span>%91.4 Model Doğruluğu</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="analysis-card-focus">
+            <div class="card-header">
+                <div class="card-title">
+                    <h2>Görsel Analiz İş Akışı</h2>
+                    <p>Tohum görselinizi yükleyin ve yapay zeka destekli sınıflandırma başlatın</p>
+                </div>
+            </div>
+
+            <div class="workflow-body">
+                <div class="upload-stage" id="uploadArea">
+                    <div class="upload-content" id="uploadPlaceholder">
+                        <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                        </svg>
+                        <h3 style="font-size:18px; font-weight:600; margin-bottom:10px;">Görsel Yükleyin</h3>
+                        <p style="font-size:14px; color:#64748b;">Sürükle-bırak veya tıklayarak dosya seçin</p>
+                        <p style="font-size:12px; color:#94a3b8; margin-top:10px;">PNG, JPG veya JPEG (Max 10MB)</p>
+                    </div>
+                    <img id="preview" alt="Preview">
+                    <div class="meta-strip" id="metaStrip">
+                        <span id="fileName">dosya.jpg</span>
+                        <span id="fileRes">0x0px</span>
+                    </div>
+                    <input type="file" id="fileInput" accept="image/*" style="display:none;">
+                </div>
+
+                <div class="action-area">
+                    <button id="predictBtn" disabled>
+                        <span>Analizi Başlat</span>
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </button>
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span id="statusText">Bekleniyor</span>
+                    </div>
+                </div>
+
+                <div id="result">
+                    <div class="hero-result">
+                        <div class="result-tag">TAHMİN SONUCU</div>
+                        <div class="result-class" id="className">-</div>
+                        <div class="result-conf"><span id="confidence">0</span>% Güven</div>
+                    </div>
+
+                    <div class="distribution-section">
+                        <h3>Olasılık Dağılımı (En Yakın 4 Alternatif)</h3>
+                        <div id="top5List"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="analysis-card-focus">
+            <div class="card-header consultant-header">
+                <div class="consultant-profile">
+                    <div class="consultant-profile">
+                        <img src="/static/images/ChatLogo.png" alt="Danışman Logo" class="avatar">
+                    </div>
+                    <div>
+                        <h2 style="font-size:16px;">Analitik Danışman</h2>
+                        <p>Sonuç yorumlama ve tür rehberi</p>
+                    </div>
+                </div>
+                <button onclick="clearChat()" class="clear-chat-btn" title="Sohbet geçmişini temizle">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    Geçmişi Temizle
+                </button>
+            </div>
+
+            <div class="quick-actions">
+                <button class="quick-btn" onclick="fillChat('Bu türün ayırt edici özellikleri nelerdir?')">Ayırt Edici Özellikler?</button>
+                <button class="quick-btn" onclick="fillChat('Sonuç ne kadar güvenilir?')">Güvenilirlik Analizi</button>
+                <button class="quick-btn" onclick="fillChat('En yakın benzer tür hangisi?')">Benzer Türler</button>
+            </div>
+
+            <div id="chatBox">
+                <div class="message bot-msg">
+                    Merhaba! Analiz sonuçlarınızı yorumlamak veya tohum türleri hakkında teknik bilgi almak için buradayım. Yukarıdaki hızlı soruları kullanabilirsiniz.
+                </div>
+            </div>
+
+            <div class="chat-input-wrapper">
+                <input type="text" id="chatInput" placeholder="Bir soru sorun...">
+                <button id="sendBtn">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="static/script.js"></script>
+</body>
+</html>
